@@ -25,9 +25,55 @@ public class ExecutableModelMethodsWithArgumentsErrorsTests {
 	private static final String PROCESS_ID = "example";
 
 	@Test
-	public void withExecutableModel_methodWithArgument() throws IOException {
+	public void withExecutableModel_argumentAndBinding() throws IOException {
 
-		KieBase kbase = loadRules(true, "rules1.drl");
+		KieBase kbase = loadRules(true, "argumentAndBinding.drl");
+		KieSession session = kbase.newKieSession();
+		
+		String value = "0123456789";
+		List<Object> values = new ArrayList<>();
+		ClassWithValue cwv = new ClassWithValue();
+		cwv.setValue(value);
+		cwv.setDoubleValue(5);
+
+		session.insert(values);
+		session.insert(cwv);
+		
+		session.startProcess(PROCESS_ID);
+		
+		session.fireAllRules();
+		
+		assertThat(values)
+				.containsExactlyInAnyOrder('5');
+	}
+	
+	@Test
+	public void withExecutableModel_argumentAndBindingNoTest() throws IOException {
+
+		KieBase kbase = loadRules(true, "argumentAndBinding2.drl");
+		KieSession session = kbase.newKieSession();
+		
+		String value = "0123456789";
+		List<Object> values = new ArrayList<>();
+		ClassWithValue cwv = new ClassWithValue();
+		cwv.setValue(value);
+		cwv.setDoubleValue(5);
+
+		session.insert(values);
+		session.insert(cwv);
+		
+		session.startProcess(PROCESS_ID);
+		
+		session.fireAllRules();
+		
+		assertThat(values)
+				.containsExactlyInAnyOrder('5');
+	}
+	
+	@Test
+	public void withExecutableModel_argumentWithoutBinding() throws IOException {
+
+		KieBase kbase = loadRules(true, "argumentWithoutBinding.drl");
 		KieSession session = kbase.newKieSession();
 		
 		String value = "0123456789";
@@ -48,9 +94,9 @@ public class ExecutableModelMethodsWithArgumentsErrorsTests {
 	}
 
 	@Test
-	public void withoutExecutableModel_methodWithArgument() throws IOException {
+	public void withoutExecutableModel_argumentAndBinding() throws IOException {
 
-		KieBase kbase = loadRules(false, "rules1.drl");
+		KieBase kbase = loadRules(false, "argumentAndBinding.drl");
 		KieSession session = kbase.newKieSession();
 		
 		String value = "0123456789";
@@ -69,10 +115,57 @@ public class ExecutableModelMethodsWithArgumentsErrorsTests {
 		assertThat(values)
 				.containsExactlyInAnyOrder('5');
 	}
+	
 	@Test
-	public void withExecutableModel_methodWithoutArgument() throws IOException {
+	public void withoutExecutableModel_argumentAndBindingNoTest() throws IOException {
 
-		KieBase kbase = loadRules(true, "rules2.drl");
+		KieBase kbase = loadRules(false, "argumentAndBinding2.drl");
+		KieSession session = kbase.newKieSession();
+		
+		String value = "0123456789";
+		List<Object> values = new ArrayList<>();
+		ClassWithValue cwv = new ClassWithValue();
+		cwv.setValue(value);
+		cwv.setDoubleValue(5);
+
+		session.insert(values);
+		session.insert(cwv);
+		
+		session.startProcess(PROCESS_ID);
+		
+		session.fireAllRules();
+		
+		assertThat(values)
+				.containsExactlyInAnyOrder('5');
+	}
+
+	@Test
+	public void withoutExecutableModel_argumentWithoutBinding() throws IOException {
+
+		KieBase kbase = loadRules(false, "argumentWithoutBinding.drl");
+		KieSession session = kbase.newKieSession();
+		
+		String value = "0123456789";
+		List<Object> values = new ArrayList<>();
+		ClassWithValue cwv = new ClassWithValue();
+		cwv.setValue(value);
+		cwv.setDoubleValue(5);
+
+		session.insert(values);
+		session.insert(cwv);
+		
+		session.startProcess(PROCESS_ID);
+		
+		session.fireAllRules();
+
+		assertThat(values)
+				.containsExactlyInAnyOrder('5');
+	}
+	
+	@Test
+	public void withExecutableModel_noArgumentsAndBinding() throws IOException {
+
+		KieBase kbase = loadRules(true, "noArgumentAndBinding.drl");
 		KieSession session = kbase.newKieSession();
 		
 		String value = "0123456789";
@@ -91,11 +184,11 @@ public class ExecutableModelMethodsWithArgumentsErrorsTests {
 		assertThat(values)
 				.containsExactlyInAnyOrder(5);
 	}
-
+	
 	@Test
-	public void withoutExecutableModel_methodWithoutArgument() throws IOException {
+	public void withExecutableModel_noArgumentsWithoutBinding() throws IOException {
 
-		KieBase kbase = loadRules(false, "rules2.drl");
+		KieBase kbase = loadRules(true, "noArgumentWithoutBinding.drl");
 		KieSession session = kbase.newKieSession();
 		
 		String value = "0123456789";
@@ -110,7 +203,53 @@ public class ExecutableModelMethodsWithArgumentsErrorsTests {
 		session.startProcess(PROCESS_ID);
 		
 		session.fireAllRules();
+		
+		assertThat(values)
+				.containsExactlyInAnyOrder(5);
+	}
+	
+	@Test
+	public void withoutExecutableModel_noArgumentsAndBinding() throws IOException {
 
+		KieBase kbase = loadRules(false, "noArgumentAndBinding.drl");
+		KieSession session = kbase.newKieSession();
+		
+		String value = "0123456789";
+		List<Object> values = new ArrayList<>();
+		ClassWithValue cwv = new ClassWithValue();
+		cwv.setValue(value);
+		cwv.setDoubleValue(5);
+
+		session.insert(values);
+		session.insert(cwv);
+		
+		session.startProcess(PROCESS_ID);
+		
+		session.fireAllRules();
+		
+		assertThat(values)
+				.containsExactlyInAnyOrder(5);
+	}
+	
+	@Test
+	public void withoutExecutableModel_noArgumentsWithoutBinding() throws IOException {
+
+		KieBase kbase = loadRules(false, "noArgumentWithoutBinding.drl");
+		KieSession session = kbase.newKieSession();
+		
+		String value = "0123456789";
+		List<Object> values = new ArrayList<>();
+		ClassWithValue cwv = new ClassWithValue();
+		cwv.setValue(value);
+		cwv.setDoubleValue(5);
+
+		session.insert(values);
+		session.insert(cwv);
+		
+		session.startProcess(PROCESS_ID);
+		
+		session.fireAllRules();
+		
 		assertThat(values)
 				.containsExactlyInAnyOrder(5);
 	}

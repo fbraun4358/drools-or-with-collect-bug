@@ -1,0 +1,16 @@
+package com.example.rules
+
+import java.util.*
+
+import com.example.*
+
+rule "Rule that breaks ExecutableModel 2"
+@filename("rules.drl")
+ruleflow-group "RFG-1"
+salience 5
+    when
+        $values: List()
+        $cwv:    ClassWithValue( doubleValue.intValue() == 5 )
+    then
+        $values.add($cwv.getDoubleValue().intValue());
+end
