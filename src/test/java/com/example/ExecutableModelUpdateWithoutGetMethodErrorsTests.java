@@ -24,78 +24,80 @@ public class ExecutableModelUpdateWithoutGetMethodErrorsTests {
 	private static final String PROCESS_ID = "example";
 
 	@Test
-	public void withExecutableModel() throws IOException {
+	public void withExecutableModel_Setter() throws IOException {
 
-		KieBase kbase = loadRules(true);
+		KieBase kbase = loadRules(true, "rulesSet.drl");
 		KieSession session = kbase.newKieSession();
 		
-		ClassWithValue cwvd = new ClassWithValue();
-		cwvd.setValue(ClassWithValue.DOUBLE);
-		ClassWithValue cwvi = new ClassWithValue();
-		cwvi.setValue(ClassWithValue.INTEGER);
-		ClassWithValue cwvn = new ClassWithValue();
+		ClassWithValue cwv = new ClassWithValue();
 
-		session.insert(cwvd);
-		session.insert(cwvi);
-		session.insert(cwvn);
+		session.insert(cwv);
 		
 		session.startProcess(PROCESS_ID);
 		
 		session.fireAllRules();
 
-		assertThat(cwvd.getDoubleValues())
+		assertThat(cwv.getDoubleValues())
 				.containsExactly(ClassWithValue.DOUBLE_VALUE);
-		assertThat(cwvd.getIntValues())
-				.containsExactly(0);
-
-		assertThat(cwvi.getIntValues())
-				.containsExactly(ClassWithValue.INTEGER_VALUE);
-		assertThat(cwvi.getDoubleValues())
-				.containsExactly(0.0);
-		
-		assertThat(cwvn.getIntValues())
-				.containsExactly(0);
-		assertThat(cwvn.getDoubleValues())
-				.containsExactly(0.0);
 	}
 	
 	@Test
-	public void withoutExecutableModel() throws IOException {
+	public void withoutExecutableModel_Setter() throws IOException {
 
-		KieBase kbase = loadRules(false);
+		KieBase kbase = loadRules(false, "rulesSet.drl");
 		KieSession session = kbase.newKieSession();
 		
-		ClassWithValue cwvd = new ClassWithValue();
-		cwvd.setValue(ClassWithValue.DOUBLE);
-		ClassWithValue cwvi = new ClassWithValue();
-		cwvi.setValue(ClassWithValue.INTEGER);
-		ClassWithValue cwvn = new ClassWithValue();
+		ClassWithValue cwv = new ClassWithValue();
 
-		session.insert(cwvd);
-		session.insert(cwvi);
-		session.insert(cwvn);
+		session.insert(cwv);
 		
 		session.startProcess(PROCESS_ID);
 		
 		session.fireAllRules();
 
-		assertThat(cwvd.getDoubleValues())
+		assertThat(cwv.getDoubleValues())
 				.containsExactly(ClassWithValue.DOUBLE_VALUE);
-		assertThat(cwvd.getIntValues())
-				.containsExactly(0);
 
-		assertThat(cwvi.getIntValues())
-				.containsExactly(ClassWithValue.INTEGER_VALUE);
-		assertThat(cwvi.getDoubleValues())
-				.containsExactly(0.0);
-		
-		assertThat(cwvn.getIntValues())
-				.containsExactly(0);
-		assertThat(cwvn.getDoubleValues())
-				.containsExactly(0.0);
 	}
 	
-	private static KieBase loadRules(boolean useExecutable) throws IOException {
+	@Test
+	public void withExecutableModel_Add() throws IOException {
+
+		KieBase kbase = loadRules(true, "rulesAdd.drl");
+		KieSession session = kbase.newKieSession();
+		
+		ClassWithValue cwv = new ClassWithValue();
+
+		session.insert(cwv);
+		
+		session.startProcess(PROCESS_ID);
+		
+		session.fireAllRules();
+
+		assertThat(cwv.getDoubleValues())
+				.containsExactly(ClassWithValue.DOUBLE_VALUE);
+	}
+	
+	@Test
+	public void withoutExecutableModel_Add() throws IOException {
+
+		KieBase kbase = loadRules(false, "rulesAdd.drl");
+		KieSession session = kbase.newKieSession();
+		
+		ClassWithValue cwv = new ClassWithValue();
+
+		session.insert(cwv);
+		
+		session.startProcess(PROCESS_ID);
+		
+		session.fireAllRules();
+
+		assertThat(cwv.getDoubleValues())
+				.containsExactly(ClassWithValue.DOUBLE_VALUE);
+
+	}
+	
+	private static KieBase loadRules(boolean useExecutable, String drlName) throws IOException {
 
 		Path resources = Paths.get("src", "test", "resources");
 		
@@ -104,7 +106,7 @@ public class ExecutableModelUpdateWithoutGetMethodErrorsTests {
 
 		Resource drl = services.getResources()
 				.newFileSystemResource(
-						resources.resolve("drl/rules.drl").toFile());
+						resources.resolve("drl/"+drlName).toFile());
 		
 		Resource rf = services.getResources()
 				.newFileSystemResource(
