@@ -1,0 +1,25 @@
+package com.example.rules
+
+import java.util.*
+
+import com.example.*
+
+
+rule "Rule that breaks ExecutableModel"
+@filename("rules.drl")
+ruleflow-group "RFG-1"
+salience 5
+no-loop true
+    when
+        $cwv:    ClassWithValue( $v: value != null )
+    then
+        if(ClassWithValue.DOUBLE.equals($v)) {
+        	$cwv.setDoubleValue(ClassWithValue.DOUBLE_VALUE);
+        
+        } else if(ClassWithValue.INTEGER.equals($v)) {
+        	$cwv.setIntValue(ClassWithValue.INTEGER_VALUE);
+        	
+        }
+        
+        update($cwv);
+end
