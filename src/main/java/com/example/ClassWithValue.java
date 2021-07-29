@@ -1,25 +1,15 @@
 package com.example;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ClassWithValue {
-
-	public static final double DOUBLE_VALUE = 5.5;
 	
-	private List<Double> doubleValues = new ArrayList<>();
+	private String value;
 
-	public List<Double> getDoubleValues() {
-		return doubleValues;
+	public String getValue() {
+		return value;
 	}
 
-	public void setDoubleValue(double doubleValue) {
-
-		this.doubleValues.clear();
-		this.doubleValues.add(doubleValue);
+	public void setValue(String value) {
+		this.value = value;
 	}
-
-	public void addDoubleValue(double doubleValue) {
-		this.doubleValues.add(doubleValue);
-	}
+	
 }
